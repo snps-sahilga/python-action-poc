@@ -1,0 +1,18 @@
+name: Test Action
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+permissions: write-all
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Test Action
+        uses: snps-sahilga/square-calculator@main
+        with:
+          num: 5

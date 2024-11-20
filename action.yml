@@ -1,0 +1,19 @@
+name: "Square Calculator"
+description: "Calculate the square of a number"
+inputs:
+  num:
+    description: "Input number"
+    required: true
+    default: "0"
+outputs:
+  result:
+    description: "The square of the input number"
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      id: actions/setup-python@v4
+      with:
+        python-version: "3.9"
+    - name: Run the Python script
+      run: python src/main.py
