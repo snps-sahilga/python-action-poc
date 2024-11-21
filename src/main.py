@@ -38,7 +38,7 @@ def get_pr_details():
 def get_diff(owner, repo, pull_number):
     pr = g.get_repo(f"{owner}/{repo}").get_pull(pull_number)
     print(pr.url)
-    headers = {'Authorization': f'token {GITHUB_TOKEN}', 'Accept': 'application/vnd.github.v3.diff'}
+    headers = {'Authorization': f"token {GITHUB_TOKEN}", 'Accept': 'application/vnd.github.v3.diff'}
 #     headers = {'Accept': 'application/vnd.github.v3.diff'}
 #     response = g._Github__requester.requestRaw("GET", pr.url, headers=headers)
 #     print(response.text)
