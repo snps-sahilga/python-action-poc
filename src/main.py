@@ -27,7 +27,7 @@ def get_pr_details():
         event_data = json.load(f)
     repository = event_data["repository"]
     number = event_data["number"]
-    pr = octokit.get_repo(f"{repository['owner']['login']}/{repository['name']}").get_pull(number)
+    pr = g.get_repo(f"{repository['owner']['login']}/{repository['name']}").get_pull(number)
     return PRDetails(
         owner=repository["owner"]["login"],
         repo=repository["name"],
