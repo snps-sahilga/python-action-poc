@@ -44,7 +44,7 @@ def get_diff(owner, repo, pull_number):
 #     print(response.text)
 #     print(response.status_code)
 #
-    response = requests.get(pr.diff_url, headers=headers)
+    response = requests.get(pr.url, headers=headers)
     if response.status_code == 200:
         diff_content = response.text
         print("Pull request diff:")
