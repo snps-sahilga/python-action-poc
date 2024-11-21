@@ -36,6 +36,18 @@ def get_pr_details():
     )
 
 def get_diff(owner, repo, pull_number):
+
+    # Verify the GitHub token without exposing it
+    headers = {'Authorization': f'token {GITHUB_TOKEN}'}
+    rate_limit_response = requests.get('https://api.github.com/rate_limit', headers=headers)
+
+    if rate_limit_response.status_code != 200:
+        print(f"Failed to validate GitHub token: {rate_limit_response.status_code}")
+        print(rate_limit_response.text)
+        return
+
+    print("GitHub token is valid.")
+
     pr = g.get_repo(f"{owner}/{repo}").get_pull(pull_number)
     print(pr.diff_url)
     headers = {'Authorization': f'token {GITHUB_TOKEN}'}
