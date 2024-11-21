@@ -10,6 +10,11 @@ OPENAI_API_MODEL = os.getenv("OPENAI_API_MODEL")
 OPENAI_API_ENDPOINT = os.getenv("OPENAI_API_ENDPOINT")
 OPENAI_API_VERSION = os.getenv("OPENAI_API_VERSION")
 
+logging.info(f"GITHUB_TOKEN": GITHUB_TOKEN)
+logging.info(f"OPENAI_API_MODEL": OPENAI_API_MODEL)
+logging.info(f"OPENAI_API_ENDPOINT": OPENAI_API_ENDPOINT)
+logging.info(f"OPENAI_API_VERSION": OPENAI_API_VERSION)
+
 g = Github(auth = GITHUB_TOKEN)
 
 # g = Github(base_url="https://{hostname}/api/v3", auth=auth) # Github Enterprise with custom hostname
