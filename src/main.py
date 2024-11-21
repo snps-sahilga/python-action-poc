@@ -53,10 +53,7 @@ def main():
     if event_data["action"] == "opened":
         diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
     elif event_data["action"] == "synchronize":
-        new_base_sha = event_data["before"]
-        new_head_sha = event_data["after"]
-        repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
-        diff = repo.compare(new_base_sha, new_head_sha).diff
+        diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
     if diff == None:
         print("No Diff Found!!!")
         return
