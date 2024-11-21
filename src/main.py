@@ -52,11 +52,13 @@ def main():
         event_data = json.load(f)
     if event_data["action"] == "opened":
 #         diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
+        print("Opened")
         new_base_sha = pr_details.base.sha
         new_head_sha = pr_details.head.sha
         repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
         diff = repo.compare(new_base_sha, new_head_sha)
     elif event_data["action"] == "synchronize":
+        print("Synchronized")
         new_base_sha = event_data["before"]
         new_head_sha = event_data["after"]
         repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
