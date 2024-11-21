@@ -38,7 +38,7 @@ def get_pr_details():
 def get_diff(owner, repo, pull_number):
     pr = g.get_repo(f"{owner}/{repo}").get_pull(pull_number)
 #     patch_url = pr.diff_url.replace('diff', 'patch')
-    response = requests.get(pr.diff_url, headers={'Authorization': f'token {GITHUB_TOKEN}'})
+    response = requests.get(pr.diff_url)
     if response.status_code == 200:
         diff_content = response.text
         print("Pull request diff:")
