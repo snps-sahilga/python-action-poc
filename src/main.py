@@ -53,7 +53,7 @@ def main():
     if event_data["action"] == "opened":
 #         diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
         print("Opened")
-        pr = g.get_repo(f"{owner}/{repo}").get_pull(pull_number)
+        pr = g.get_repo(f"{pr_details.owner}/{pr_details.repo}").get_pull(pr_details.pull_number)
         new_base_sha = pr.base.sha
         new_head_sha = pr.head.sha
         repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
