@@ -1,7 +1,7 @@
 import os
 
 def main():
-    input_num = os.getenv('INPUT_NUM', "0")
+    input_num = os.getenv('INPUT_NUM')
     try:
         number = int(input_num)
         square = number ** 2
