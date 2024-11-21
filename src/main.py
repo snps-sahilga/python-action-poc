@@ -37,19 +37,24 @@ def get_pr_details():
 
 def get_diff(owner, repo, pull_number):
     pr = g.get_repo(f"{owner}/{repo}").get_pull(pull_number)
-    print(pr.diff_url)
-    headers = {'Authorization': f'token {GITHUB_TOKEN}', 'Accept': 'application/vnd.github.v3.diff'}
-    response = requests.get(pr.diff_url, headers=headers)
-    if response.status_code == 200:
-        diff_content = response.text
-        print("Pull request diff:")
-        print(diff_content)
-        return diff_content
-    else:
-        print(f"Failed to get pull request diff: {response.status_code}")
-        print(response.text)
-        return
-    pr_diff_url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}"
+    print(pr.url)
+#     headers = {'Authorization': f'token {GITHUB_TOKEN}', 'Accept': 'application/vnd.github.v3.diff'}
+    headers = {'Accept': 'application/vnd.github.v3.diff'}
+    response = g._Github__requester.requestRaw("GET", pr.url, headers=headers)
+    print(response.text)
+    print(response.status_code)
+
+#     response = requests.get(pr.diff_url, headers=headers)
+#     if response.status_code == 200:
+#         diff_content = response.text
+#         print("Pull request diff:")
+#         print(diff_content)
+#         return diff_content
+#     else:
+#         print(f"Failed to get pull request diff: {response.status_code}")
+#         print(response.text)
+#         return
+#     pr_diff_url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}"
 
     # Fetch the pull request diff
 #     try:
