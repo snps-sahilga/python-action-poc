@@ -19,10 +19,10 @@ runs:
     - name: List directory contents
       run: ls -R $GITHUB_ACTION_PATH/..
       shell: bash
-    - name: Set up Dependencies
-      run: pip install -r $GITHUB_ACTION_PATH/../requirements.txt
-      shell: bash
-    - name: Calculate Square
-      id: square
-      run: python $GITHUB_ACTION_PATH/../src/main.py
-      shell: bash
+#    - name: Set up Dependencies
+#      run: pip install -r $GITHUB_ACTION_PATH/../requirements.txt
+#      shell: bash
+#    - name: Calculate Square
+#      id: square
+#      run: python $GITHUB_ACTION_PATH/../src/main.py
+#      shell: bash
