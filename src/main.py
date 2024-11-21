@@ -68,16 +68,16 @@ def main():
         return
     else:
 #         print(diff)
-        print(f"Status of comparison: {comparison.status}")
-        print(f"Total commits in the comparison: {comparison.total_commits}")
+        print(f"Status of comparison: {diff.status}")
+        print(f"Total commits in the comparison: {diff.total_commits}")
 
         # Iterate over the files in the comparison
-        for file in comparison.files:
-            print(f"Filename: {file.filename}")
-            print(f"Status: {file.status}")
-            print(f"Additions: {file.additions}")
-            print(f"Deletions: {file.deletions}")
-            print(f"Changes: {file.changes}")
+        for file in diff.files:
+            print(f"Filename: {diff.filename}")
+            print(f"Status: {diff.status}")
+            print(f"Additions: {diff.additions}")
+            print(f"Deletions: {diff.deletions}")
+            print(f"Changes: {diff.changes}")
             print("")
     input_num = os.getenv('INPUT_NUM')
     try:
