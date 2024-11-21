@@ -39,7 +39,8 @@ def get_diff(owner, repo, pull_number):
     pr = g.get_repo(f"{owner}/{repo}").get_pull(pull_number)
 #     patch_url = pr.diff_url.replace('diff', 'patch')
     print(pr.diff_url)
-    response = requests.get(pr.diff_url)
+    headers = {'Authorization': 'token ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3.diff'}
+    response = requests.get(pr.diff_url, headers=headers)
     if response.status_code == 200:
         diff_content = response.text
         print("Pull request diff:")
