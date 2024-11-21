@@ -47,6 +47,7 @@ def get_diff(owner, repo, pull_number):
         return diff_content
     else:
         print(f"Failed to get pull request diff: {response.status_code}")
+        print(response.text)
         return
 
 def main():
