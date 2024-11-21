@@ -16,13 +16,10 @@ runs:
       uses: actions/setup-python@v5
       with:
         python-version: "3.10"
-    - name: List directory contents
-      run: ls -R $GITHUB_ACTION_PATH/..
+    - name: Set up Dependencies
+      run: pip install -r $GITHUB_ACTION_PATH/requirements.txt
       shell: bash
-#    - name: Set up Dependencies
-#      run: pip install -r $GITHUB_ACTION_PATH/../requirements.txt
-#      shell: bash
-#    - name: Calculate Square
-#      id: square
-#      run: python $GITHUB_ACTION_PATH/../src/main.py
-#      shell: bash
+    - name: Calculate Square
+      id: square
+      run: python $GITHUB_ACTION_PATH/src/main.py
+      shell: bash
