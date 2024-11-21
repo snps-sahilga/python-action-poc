@@ -1,20 +1,25 @@
-name: "Square Calculator"
-description: "Calculate the square of a number"
+name: 'Square Calculator'
+description: 'Calculate the square of a number'
 inputs:
   num:
-    description: "Input number"
+    description: 'Input number'
     required: true
     default: "0"
 outputs:
   result:
-    description: "The square of the input number"
+    description: 'The square of the input number'
+    value: ${{ steps.square.outputs.result }}
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.9"
-    - name: Run the Python script
+        python-version: "3.10"
+    - name: Set up Dependencies
+      run: pip install -r requirements.txt
+      shell: bash
+    - name: Calculate Square
+      id: square
       run: python src/main.py
       shell: bash
