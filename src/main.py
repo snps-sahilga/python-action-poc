@@ -35,12 +35,17 @@ def get_pr_details():
         description=pr.body or ""
     )
 
+def get_diff(owner, repo, pull_number):
+    pr = g.get_repo(f"{owner}/{repo}").get_pull(pull_number)
+    return pr.diff()
+
 def main():
     pr_details = get_pr_details()
-    print(pr_details.repo)
-    print(pr_details.title)
-    print(pr_details.description)
-    print(pr_details.pull_number)
+    with open(os.getenv("GITHUB_EVENT_PATH"), "r") as f:
+        event_data = json.load(f)
+    if event_data["action"] == "opened":
+        diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
+    print(diff)
     input_num = os.getenv('INPUT_NUM')
     try:
         number = int(input_num)
