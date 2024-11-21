@@ -78,6 +78,7 @@ def main():
             print(f"Additions: {file.additions}")
             print(f"Deletions: {file.deletions}")
             print(f"Changes: {file.changes}")
+            print(file.patch)
             print("")
     input_num = os.getenv('INPUT_NUM')
     try:
