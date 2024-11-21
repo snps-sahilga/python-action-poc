@@ -20,8 +20,8 @@ runs:
       run: pip install -r $GITHUB_ACTION_PATH/requirements.txt
       shell: bash
     - name: Pass Inputs to Shell
-      run: |
-        echo "INPUT_NUM=${{ inputs.num }}"
+      run: echo "INPUT_NUM=${{ inputs.num }}"
+      shell: bash
     - name: Calculate Square
       id: square
       run: python $GITHUB_ACTION_PATH/src/main.py
