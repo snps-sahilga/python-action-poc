@@ -1,6 +1,21 @@
-name: 'Square Calculator'
-description: 'Calculate the square of a number'
+name: 'GPT Based Automatic Code Review'
+description: 'Provide code review comments using OpenAI GPT-4.'
 inputs:
+  GITHUB_TOKEN:
+    description: 'GitHub token to interact with the repository.'
+    required: true
+  OPENAI_API_KEY:
+    description: 'OpenAI API key for GPT.'
+    required: true
+  OPENAI_API_ENDPOINT:
+    description: 'OpenAI Endpoint for GPT.'
+    required: true
+  OPENAI_API_MODEL:
+    description: 'OpenAI API model.'
+    required: true
+  OPENAI_API_VERSION:
+    description: 'OpenAI API version.'
+    required: true
   num:
     description: 'Input number'
     required: true
@@ -19,9 +34,14 @@ runs:
     - name: Set up Dependencies
       run: pip install -r $GITHUB_ACTION_PATH/requirements.txt
       shell: bash
-    - name: Calculate Square
-      id: square
+    - name: Code Review
+      id: code-review
       run: python $GITHUB_ACTION_PATH/src/main.py
       env:
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        OPENAI_API_KEY: ${{ inputs.OPENAI_API_KEY }}
+        OPENAI_API_ENDPOINT: ${{ inputs.OPENAI_API_ENDPOINT }}
+        OPENAI_API_MODEL: ${{ inputs.OPENAI_API_MODEL }}
+        OPENAI_API_VERSION: ${{ inputs.OPENAI_API_VERSION }}
         INPUT_NUM: ${{ inputs.num }}
       shell: bash
