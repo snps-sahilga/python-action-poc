@@ -38,7 +38,7 @@ def get_pr_details():
 def get_diff(owner, repo, pull_number):
 #     pr = g.get_repo(f"{owner}/{repo}").get_pull(pull_number)
 #     print(pr.diff_url)
-#     headers = {'Authorization': f'token {GITHUB_TOKEN}'}
+    headers = {'Authorization': f'token {GITHUB_TOKEN}'}
 #     response = requests.get(pr.diff_url, headers=headers)
 #     if response.status_code == 200:
 #         diff_content = response.text
