@@ -51,14 +51,32 @@ def main():
     with open(os.getenv("GITHUB_EVENT_PATH"), "r") as f:
         event_data = json.load(f)
     if event_data["action"] == "opened":
-        diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
+#         diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
+        new_base_sha = pr_details.base.sha
+        new_head_sha = pr_details.head.sha
+        repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
+        diff = repo.compare(new_base_sha, new_head_sha)
     elif event_data["action"] == "synchronize":
-        diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
+        new_base_sha = event_data["before"]
+        new_head_sha = event_data["after"]
+        repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
+        diff = repo.compare(new_base_sha, new_head_sha)
     if diff == None:
         print("No Diff Found!!!")
         return
     else:
-        print(diff)
+#         print(diff)
+        print(f"Status of comparison: {comparison.status}")
+        print(f"Total commits in the comparison: {comparison.total_commits}")
+
+        # Iterate over the files in the comparison
+        for file in comparison.files:
+            print(f"Filename: {file.filename}")
+            print(f"Status: {file.status}")
+            print(f"Additions: {file.additions}")
+            print(f"Deletions: {file.deletions}")
+            print(f"Changes: {file.changes}")
+            print("")
     input_num = os.getenv('INPUT_NUM')
     try:
         number = int(input_num)

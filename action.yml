@@ -16,6 +16,10 @@ inputs:
   OPENAI_API_VERSION:
     description: 'OpenAI API version.'
     required: true
+  exclude:
+    description: 'Glob patterns to exclude files from the diff analysis'
+    required: false
+    default: ""
   num:
     description: 'Input number'
     required: true
@@ -43,5 +47,6 @@ runs:
         OPENAI_API_ENDPOINT: ${{ inputs.OPENAI_API_ENDPOINT }}
         OPENAI_API_MODEL: ${{ inputs.OPENAI_API_MODEL }}
         OPENAI_API_VERSION: ${{ inputs.OPENAI_API_VERSION }}
+        exclude: ${{ inputs.exclude }}
         INPUT_NUM: ${{ inputs.num }}
       shell: bash
