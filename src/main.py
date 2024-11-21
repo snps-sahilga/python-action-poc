@@ -1,5 +1,4 @@
 import os
-import logging
 import json
 import requests
 from github import Github
@@ -38,8 +37,10 @@ def get_pr_details():
 
 def main():
     pr_details = get_pr_details()
-    logging.debug(pr_details)
-    print(pr_details)
+    print(pr_details.repo)
+    print(pr_details.title)
+    print(pr_details.description)
+    print(pr_details.pull_number)
     input_num = os.getenv('INPUT_NUM')
     try:
         number = int(input_num)
