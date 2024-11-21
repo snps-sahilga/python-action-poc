@@ -70,7 +70,7 @@ def main():
         return
 
     exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
-    filtered_diff = [file for file in diff if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
+    filtered_diff = [file for file in diff.files if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
 
     print(f"Status of comparison: {diff.status}")
     print(f"Total commits in the comparison: {diff.total_commits}")
