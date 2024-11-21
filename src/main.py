@@ -38,7 +38,7 @@ def get_pr_details():
 
 def main():
     pr_details = get_pr_details()
-    logging.info(pr_details)
+    logging.debug(pr_details)
     input_num = os.getenv('INPUT_NUM')
     try:
         number = int(input_num)
