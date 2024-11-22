@@ -108,33 +108,37 @@ def main():
     with open(os.getenv("GITHUB_EVENT_PATH"), "r") as f:
         event_data = json.load(f)
     if event_data["action"] == "opened":
-#         diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
         pr = g.get_repo(f"{pr_details.owner}/{pr_details.repo}").get_pull(pr_details.pull_number)
         base = pr.base.sha
         head = pr.head.sha
-        headers = {'Authorization': f"token {GITHUB_TOKEN}", 'Accept': 'application/vnd.github.v3.diff'}
-        pr_url = f"https://api.github.com/repos/{pr_details.owner}/{pr_details.repo}/compare/{base}...{head}"
-        print(pr_url)
-        response = requests.get(pr_url, headers=headers)
-        print(response.text)
-        print(response.status_code)
-#         pr = g.get_repo(f"{pr_details.owner}/{pr_details.repo}").get_pull(pr_details.pull_number)
-        new_base_sha = pr.base.sha
-        new_head_sha = pr.head.sha
-#         print(pr.base)
-#         print(pr.head)
     elif event_data["action"] == "synchronize":
-        new_base_sha = event_data["before"]
-        new_head_sha = event_data["after"]
-        repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
-        diff = repo.compare(new_base_sha, new_head_sha)
+        base = event_data["before"]
+        head = event_data["after"]
+#         repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
+#         diff = repo.compare(new_base_sha, new_head_sha)
     else:
         print("Unsupported event:", os.getenv("GITHUB_EVENT_NAME"))
+        return
+
+    headers = {'Authorization': f"token {GITHUB_TOKEN}", 'Accept': 'application/vnd.github.v3.diff'}
+    pr_url = f"https://api.github.com/repos/{pr_details.owner}/{pr_details.repo}/compare/{base}...{head}"
+    response = requests.get(pr_url, headers=headers)
+
+    if response.status_code == 200:
+        diff = response.text
+    else:
+        print(f"Failed to get pull request diff: {response.status_code}")
         return
 
     if diff == None:
         print("No Diff Found!!!")
         return
+
+        patches = PatchSet(diff)
+        print(patches.path)
+        for hunk in patches.hunks:
+            print(section_header)
+            print(lines)
 
 #     exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
 #     filtered_diff = [file for file in diff.files if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
