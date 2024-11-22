@@ -110,6 +110,8 @@ def main():
         pr = g.get_repo(f"{pr_details.owner}/{pr_details.repo}").get_pull(pr_details.pull_number)
         new_base_sha = pr.base.sha
         new_head_sha = pr.head.sha
+        print(pr.base)
+        print(pr.head)
     elif event_data["action"] == "synchronize":
         new_base_sha = event_data["before"]
         new_head_sha = event_data["after"]
