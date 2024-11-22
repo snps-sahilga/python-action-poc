@@ -135,9 +135,10 @@ def main():
         return
 
     patches = PatchSet(diff)
-    for hunk in patches.hunks:
-        print(section_header)
-        print(lines)
+    for patch in patches:
+        for hunk in patch:
+            print(section_header)
+            print(lines)
 
 #     exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
 #     filtered_diff = [file for file in diff.files if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
