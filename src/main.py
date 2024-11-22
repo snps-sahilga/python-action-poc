@@ -51,7 +51,7 @@ def get_diff(owner, repo, pull_number):
         print(f"Failed to get pull request diff: {response.status_code}")
         return
 
-def create_prompt(file, pr_details):
+def create_prompt(hunk, filename, pr_details):
     return f"""Your task is to review pull requests. Instructions:
     - Provide the response in following JSON format:  {"reviews": [{"lineNumber":  <line_number>, "reviewComment": <review comment>}]}
     - Do not give positive comments or compliments.
@@ -60,7 +60,7 @@ def create_prompt(file, pr_details):
     - Use the given description only for the overall context and only comment the code.
     - IMPORTANT: NEVER suggest adding comments to the code.
 
-    Review the following code diff in the file "{file.filename}" and take the pull request title and description into account when writing the response.
+    Review the following code diff in the file "{filename}" and take the pull request title and description into account when writing the response.
 
     Pull request title: {pr_details.title}
     Pull request description:
@@ -72,24 +72,24 @@ def create_prompt(file, pr_details):
     Git diff to review:
 
     ```diff
-    {file.patch}
+    {hunk}
     ```
     """
 
 def analyze_code(diff, pr_details):
     patches = PatchSet(diff)
+    exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
     comments = []
     for patch in patches:
-        print(patch.path)
-        if patch.is_removed_file:
+        if patch.is_removed_file or any(fnmatch.fnmatch(patch.path, pattern) for pattern in exclude_patterns):
             continue
         for hunk in patch:
-#             prompt = create_prompt(hunk, pr_details)
-            print(hunk)
+            prompt = create_prompt(hunk, patch.path, pr_details)
+            print(prompt)
             print("---------------------------------")
         print("************************************************")
 
-    #     exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
+    #
     #     filtered_diff = [file for file in diff.files if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
 
 #         patches = PatchSet(file.patch)
