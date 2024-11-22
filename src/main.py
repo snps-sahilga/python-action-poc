@@ -113,7 +113,8 @@ def main():
         head = pr.head.sha
         headers = {'Authorization': f"token {GITHUB_TOKEN}", 'Accept': 'application/vnd.github.v3.diff'}
         pr_url = f"https://api.github.com/repos/{owner}/{repo}/compare/{base}...{head}"
-        response = requests.get(pr.url, headers=headers)
+        print(pr_url)
+        response = requests.get(pr_url, headers=headers)
         print(diff)
 #         pr = g.get_repo(f"{pr_details.owner}/{pr_details.repo}").get_pull(pr_details.pull_number)
         new_base_sha = pr.base.sha
