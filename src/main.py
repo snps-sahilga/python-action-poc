@@ -79,6 +79,7 @@ def analyze_code(parsed_diff, pr_details):
     for file in parsed_diff:
         if file.status == "removed":
             continue
+        print(file.patch)
         patches = PatchSet(file.patch)
         print(patches.path)
         for hunk in patches.hunks:
