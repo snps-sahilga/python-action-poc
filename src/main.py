@@ -48,7 +48,7 @@ def get_diff(owner, repo, pull_number):
         print(f"Failed to get pull request diff: {response.status_code}")
         return
 
-def create_prompt(file, pr_details)::
+def create_prompt(file, pr_details):
     return f"""Your task is to review pull requests. Instructions:
     - Provide the response in following JSON format:  {"reviews": [{"lineNumber":  <line_number>, "reviewComment": <review comment>}]}
     - Do not give positive comments or compliments.
