@@ -53,7 +53,7 @@ def get_diff(owner, repo, pull_number):
 
 def create_prompt(hunk, filename, pr_details):
     return f"""Your task is to review pull requests. Instructions:
-    - Provide the response in following JSON format:  {"reviews": [{"lineNumber":  <line_number>, "reviewComment": <review comment>}]}
+    - Provide the response in following JSON format:  {{"reviews": [{{"lineNumber":  <line_number>, "reviewComment": <review comment>}}]}}
     - Do not give positive comments or compliments.
     - Provide comments and suggestions ONLY if there is something to improve, otherwise "reviews" should be an empty array.
     - Write the comment in GitHub Markdown format.
