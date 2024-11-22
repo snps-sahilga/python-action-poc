@@ -3,6 +3,7 @@ import json
 import requests
 import fnmatch
 from github import Github
+from unidiff import PatchSet
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -78,8 +79,13 @@ def analyze_code(parsed_diff, pr_details):
     for file in parsed_diff:
         if file.status == "removed":
             continue
-        prompt = create_prompt(file, pr_details)
-        print(prompt)
+        patches = PatchSet(file.diff)
+        print(patches.path)
+        for hunk in patches.hunks:
+            print(section_header)
+            print(lines)
+#         prompt = create_prompt(file, pr_details)
+#         print(prompt)
 #         ai_response = get_ai_response(prompt)
 #         if ai_response:
 #             new_comments = create_comment(file, chunk, ai_response)
