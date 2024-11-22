@@ -41,6 +41,7 @@ def get_pr_details():
 def get_diff(owner, repo, pull_number):
     pr = g.get_repo(f"{owner}/{repo}").get_pull(pull_number)
     headers = {'Authorization': f"token {GITHUB_TOKEN}", 'Accept': 'application/vnd.github.v3.diff'}
+    print(pr.url)
     response = requests.get(pr.url, headers=headers)
     if response.status_code == 200:
         diff_content = response.text
@@ -106,29 +107,30 @@ def main():
     with open(os.getenv("GITHUB_EVENT_PATH"), "r") as f:
         event_data = json.load(f)
     if event_data["action"] == "opened":
-        # diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
-        pr = g.get_repo(f"{pr_details.owner}/{pr_details.repo}").get_pull(pr_details.pull_number)
-        new_base_sha = pr.base.sha
-        new_head_sha = pr.head.sha
-        print(pr.base)
-        print(pr.head)
+        diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
+        print(diff)
+#         pr = g.get_repo(f"{pr_details.owner}/{pr_details.repo}").get_pull(pr_details.pull_number)
+#         new_base_sha = pr.base.sha
+#         new_head_sha = pr.head.sha
+#         print(pr.base)
+#         print(pr.head)
     elif event_data["action"] == "synchronize":
         new_base_sha = event_data["before"]
         new_head_sha = event_data["after"]
+        repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
+        diff = repo.compare(new_base_sha, new_head_sha)
     else:
         print("Unsupported event:", os.getenv("GITHUB_EVENT_NAME"))
         return
-    repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
-    diff = repo.compare(new_base_sha, new_head_sha)
 
     if diff == None:
         print("No Diff Found!!!")
         return
 
-    exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
-    filtered_diff = [file for file in diff.files if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
-
-    analyze_code(filtered_diff, pr_details)
+#     exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
+#     filtered_diff = [file for file in diff.files if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
+#
+#     analyze_code(filtered_diff, pr_details)
 
     input_num = os.getenv('INPUT_NUM')
     try:
