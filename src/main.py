@@ -76,19 +76,22 @@ def create_prompt(file, pr_details):
     ```
     """
 
-def analyze_code(parsed_diff, pr_details):
+def analyze_code(diff, pr_details):
+    patches = PatchSet(diff)
     comments = []
-    for file in parsed_diff:
-        if file.status == "removed":
+    for patch in patches:
+        print(patch.path)
+        if patch.is_removed_file:
             continue
-        print(f"Filename: {file.filename}")
-        print(f"Status: {file.status}")
-        print(f"Additions: {file.additions}")
-        print(f"Deletions: {file.deletions}")
-        print(f"Changes: {file.changes}")
-        print(f"SHA: {file.sha}")
-        print(file.patch)
+        for hunk in patch:
+#             prompt = create_prompt(hunk, pr_details)
+            print(hunk)
+            print("---------------------------------")
         print("************************************************")
+
+    #     exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
+    #     filtered_diff = [file for file in diff.files if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
+
 #         patches = PatchSet(file.patch)
 #         print(patches.path)
 #         for hunk in patches.hunks:
@@ -114,8 +117,6 @@ def main():
     elif event_data["action"] == "synchronize":
         base = event_data["before"]
         head = event_data["after"]
-#         repo = g.get_repo(f"{pr_details.owner}/{pr_details.repo}")
-#         diff = repo.compare(new_base_sha, new_head_sha)
     else:
         print("Unsupported event:", os.getenv("GITHUB_EVENT_NAME"))
         return
@@ -134,17 +135,7 @@ def main():
         print("No Diff Found!!!")
         return
 
-    patches = PatchSet(diff)
-    for patch in patches:
-        for hunk in patch:
-            print(hunk)
-            print("---------------------------------")
-        print("************************************************")
-
-#     exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
-#     filtered_diff = [file for file in diff.files if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
-#
-#     analyze_code(filtered_diff, pr_details)
+    analyze_code(diff, pr_details)
 
     input_num = os.getenv('INPUT_NUM')
     try:
