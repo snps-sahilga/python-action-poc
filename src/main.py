@@ -79,13 +79,18 @@ def analyze_code(parsed_diff, pr_details):
     for file in parsed_diff:
         if file.status == "removed":
             continue
+        print(f"Filename: {file.filename}")
+        print(f"Status: {file.status}")
+        print(f"Additions: {file.additions}")
+        print(f"Deletions: {file.deletions}")
+        print(f"Changes: {file.changes}")
         print(file.patch)
         print("************************************************")
-        patches = PatchSet(file.patch)
-        print(patches.path)
-        for hunk in patches.hunks:
-            print(section_header)
-            print(lines)
+#         patches = PatchSet(file.patch)
+#         print(patches.path)
+#         for hunk in patches.hunks:
+#             print(section_header)
+#             print(lines)
 #         prompt = create_prompt(file, pr_details)
 #         print(prompt)
 #         ai_response = get_ai_response(prompt)
