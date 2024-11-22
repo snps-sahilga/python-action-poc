@@ -48,6 +48,45 @@ def get_diff(owner, repo, pull_number):
         print(f"Failed to get pull request diff: {response.status_code}")
         return
 
+def create_prompt(file, pr_details)::
+    return f"""Your task is to review pull requests. Instructions:
+    - Provide the response in following JSON format:  {"reviews": [{"lineNumber":  <line_number>, "reviewComment": <review comment>}]}
+    - Do not give positive comments or compliments.
+    - Provide comments and suggestions ONLY if there is something to improve, otherwise "reviews" should be an empty array.
+    - Write the comment in GitHub Markdown format.
+    - Use the given description only for the overall context and only comment the code.
+    - IMPORTANT: NEVER suggest adding comments to the code.
+
+    Review the following code diff in the file "{file.filename}" and take the pull request title and description into account when writing the response.
+
+    Pull request title: {pr_details.title}
+    Pull request description:
+
+    ---
+    {pr_details.description}
+    ---
+
+    Git diff to review:
+
+    ```diff
+    {file.patch}
+    ```
+    """
+
+def analyze_code(parsed_diff, pr_details):
+    comments = []
+    for file in parsed_diff:
+        if file.status == "removed":
+            continue
+        prompt = create_prompt(file, pr_details)
+        print(prompt)
+#         ai_response = get_ai_response(prompt)
+#         if ai_response:
+#             new_comments = create_comment(file, chunk, ai_response)
+#             if new_comments:
+#                 comments.extend(new_comments)
+#     return comments
+
 def main():
     pr_details = get_pr_details()
     with open(os.getenv("GITHUB_EVENT_PATH"), "r") as f:
@@ -73,18 +112,7 @@ def main():
     exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
     filtered_diff = [file for file in diff.files if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
 
-    print(f"Status of comparison: {diff.status}")
-    print(f"Total commits in the comparison: {diff.total_commits}")
-
-    # Iterate over the files in the comparison
-    for file in diff.files:
-        print(f"Filename: {file.filename}")
-        print(f"Status: {file.status}")
-        print(f"Additions: {file.additions}")
-        print(f"Deletions: {file.deletions}")
-        print(f"Changes: {file.changes}")
-        print(file.patch)
-        print("")
+    analyze_code(filtered_diff, pr_details)
 
     input_num = os.getenv('INPUT_NUM')
     try:
