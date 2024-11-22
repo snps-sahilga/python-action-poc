@@ -109,6 +109,7 @@ def main():
         event_data = json.load(f)
     if event_data["action"] == "opened":
 #         diff = get_diff(pr_details.owner, pr_details.repo, pr_details.pull_number)
+        pr = g.get_repo(f"{pr_details.owner}/{pr_details.repo}").get_pull(pr_details.pull_number)
         base = pr.base.sha
         head = pr.head.sha
         headers = {'Authorization': f"token {GITHUB_TOKEN}", 'Accept': 'application/vnd.github.v3.diff'}
