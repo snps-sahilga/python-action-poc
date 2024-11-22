@@ -84,6 +84,7 @@ def analyze_code(parsed_diff, pr_details):
         print(f"Additions: {file.additions}")
         print(f"Deletions: {file.deletions}")
         print(f"Changes: {file.changes}")
+        print(f"SHA: {file.sha}")
         print(file.patch)
         print("************************************************")
 #         patches = PatchSet(file.patch)
