@@ -135,7 +135,6 @@ def main():
         return
 
     patches = PatchSet(diff)
-    print(patches.path)
     for hunk in patches.hunks:
         print(section_header)
         print(lines)
