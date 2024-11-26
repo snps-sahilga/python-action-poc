@@ -4,6 +4,7 @@ import requests
 import fnmatch
 from github import Github
 from unidiff import PatchSet
+from openai import AzureOpenAI
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -76,6 +77,17 @@ def create_prompt(hunk, filename, pr_details):
     ```
     """
 
+def get_ai_response(prompt):
+    client = AzureOpenAI(azure_endpoint = OPENAI_API_ENDPOINT, api_key = OPENAI_API_KEY, api_version = OPENAI_API_VERSION)
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": prompt}
+    ]
+    response = client.chat.completions.create(model = OPENAI_API_MODEL, messages=messages)
+    print(response.choices[0].message.content)
+    client.close()
+#     return json.loads(response_json["choices"][0]["text"].strip()).get("reviews", [])
+
 def analyze_code(diff, pr_details):
     patches = PatchSet(diff)
     exclude_patterns = [s.strip() for s in EXCLUDE.split(",")]
@@ -85,20 +97,10 @@ def analyze_code(diff, pr_details):
             continue
         for hunk in patch:
             prompt = create_prompt(hunk, patch.path, pr_details)
-            print(prompt)
+            get_ai_response(prompt)
             print("---------------------------------")
         print("************************************************")
 
-    #
-    #     filtered_diff = [file for file in diff.files if not any(fnmatch.fnmatch(file.filename, pattern) for pattern in exclude_patterns)]
-
-#         patches = PatchSet(file.patch)
-#         print(patches.path)
-#         for hunk in patches.hunks:
-#             print(section_header)
-#             print(lines)
-#         prompt = create_prompt(file, pr_details)
-#         print(prompt)
 #         ai_response = get_ai_response(prompt)
 #         if ai_response:
 #             new_comments = create_comment(file, chunk, ai_response)
